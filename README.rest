@@ -1,0 +1,40 @@
+jsonpath.js
+===========
+
+a modern and tested js implementation of jsonpath (http://goessner.net/articles/JsonPath/)
+
+status
+------
+
+for now the only supported parts are:
+
+* selecting from the root (expressions that start with $.)
+* attribute traversing using the dot syntax ($.a.b, not a['b'])
+* wildcard ($.a.*.b)
+
+this is because those are the main things I need right now, others will be
+added when I need them or I have more time (or you fork and contribute :)
+
+things to implement in (my) order of importance
+-----------------------------------------------
+
+* array selector with [] ($.a[2].b)
+* attribute selector with [] ($['a']['b'])
+* array slice operator ($.a[1:7:-1])
+* basic filters ($.store.book[?(@.price < 10)])
+* recursive descent ($..book)
+
+thigs I won't implement
+-----------------------
+
+* arbitrary script expression
+
+author
+------
+
+marianoguerra
+
+license
+-------
+
+MIT
