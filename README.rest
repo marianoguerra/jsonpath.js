@@ -24,10 +24,16 @@ things to implement in (my) order of importance
 * basic filters ($.store.book[?(@.price < 10)])
 * recursive descent ($..book)
 
-thigs I won't implement
+things I won't implement
 -----------------------
 
 * arbitrary script expression
+
+TODO
+----
+
+* migrate jsonpath parsing to jison?
+* have the tests in a json file to be shared with other jsonpath implementations
 
 author
 ------
