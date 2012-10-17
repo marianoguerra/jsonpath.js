@@ -57,5 +57,59 @@ define([], function () {
         return result;
     };
 
+    mod.set = function (path, value, obj) {
+        var node = obj, subPath, i, isLastSubPath;
+
+        if (obj === undefined) {
+            obj = {};
+            node = obj;
+        }
+
+        path = mod._compilePath(path);
+
+        obj[path] = value;
+
+        for (i = 0; i < path.length; i += 1) {
+            subPath = path[i];
+
+            isLastSubPath = (i + 1 === path.length);
+
+            if (node[subPath] === undefined) {
+                // if last one
+                if (isLastSubPath) {
+                    node[subPath] = value;
+                } else {
+                    node[subPath] = {};
+                }
+            } else if (isLastSubPath) {
+                node[subPath] = value;
+            }
+
+            node = node[subPath];
+        }
+
+        return obj;
+    };
+
+    // receive a mapping of paths in key and paths in value
+    // extract the value of path in src with the key and set it
+    // to the path in value in dest
+    mod.extract = function (mapping, src, dest, defaultValue) {
+        var srcPath, destPath, srcValue;
+
+        if (dest === undefined) {
+            dest = {};
+        }
+
+        for (srcPath in mapping) {
+            destPath = mapping[srcPath];
+
+            srcValue = mod.get(srcPath, src, defaultValue);
+            mod.set(destPath, srcValue, dest);
+        }
+
+        return dest;
+    };
+
     return mod;
 });
