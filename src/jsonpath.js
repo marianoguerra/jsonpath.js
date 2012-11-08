@@ -1,5 +1,16 @@
 /*global define*/
-define([], function () {
+(function (root, factory) {
+    "use strict";
+
+    if (typeof define === 'function' && define.amd) {
+        define([], function () {
+            return (root.JsonPath = factory());
+        });
+    } else {
+        // Browser globals
+        root.JsonPath = factory();
+    }
+}(this, function () {
     "use strict";
     var mod = {};
 
@@ -95,21 +106,36 @@ define([], function () {
     // extract the value of path in src with the key and set it
     // to the path in value in dest
     mod.extract = function (mapping, src, dest, defaultValue) {
-        var srcPath, destPath, srcValue;
+        var i, srcPath, destPath, srcValue;
 
         if (dest === undefined) {
             dest = {};
         }
 
-        for (srcPath in mapping) {
-            destPath = mapping[srcPath];
+        if (Array.isArray(mapping)) {
+            // if it's an array then each object has a srcPath and destPath
+            // field
+            for (i = 0; i < mapping.length; i += 1) {
+                srcPath  = mapping[i].srcPath;
+                destPath = mapping[i].destPath;
 
-            srcValue = mod.get(srcPath, src, defaultValue);
-            mod.set(destPath, srcValue, dest);
+                srcValue = mod.get(srcPath, src, defaultValue);
+                mod.set(destPath, srcValue, dest);
+            }
+
+        } else {
+            // if it's not an array then use keys as source path and values
+            // as dest paths
+            for (srcPath in mapping) {
+                destPath = mapping[srcPath];
+
+                srcValue = mod.get(srcPath, src, defaultValue);
+                mod.set(destPath, srcValue, dest);
+            }
         }
 
         return dest;
     };
 
     return mod;
-});
+}));
